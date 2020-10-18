@@ -46,9 +46,7 @@ function update(data, type, desc) {
   xScale.domain(companies);
   yScale.domain([0, d3.max(data, (d) => d[type])]);
 
-  const rects = group.selectAll('rect').data(data, (d) => {
-    return d.company;
-  });
+  const rects = group.selectAll('rect').data(data, (d) => d.company);
 
   // Implement the enter-update-exist sequence
   rects
@@ -69,7 +67,7 @@ function update(data, type, desc) {
   rects
     .exit()
     .transition()
-    .duration(durationSpeed / 2)
+    .duration(durationSpeed)
     .attr('fill', '#EBEBEB')
     .attr('y', height)
     .remove();
@@ -78,10 +76,13 @@ function update(data, type, desc) {
   xAxisGroup
     .attr('transform', 'translate(0,' + height + ')')
     .transition()
-    .duration(durationSpeed)
+    .duration(durationSpeed - 400)
     .call(xAxis);
 
-  yAxisGroup.transition().duration(durationSpeed).call(yAxis);
+  yAxisGroup
+    .transition()
+    .duration(durationSpeed - 400)
+    .call(yAxis);
 
   yAxisTitle
     .attr('x', 30)
