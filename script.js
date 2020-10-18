@@ -29,25 +29,48 @@ let yAxisGroup = group.append('g').attr('class', 'y-axis axis');
 let yAxisTitle = group.append('text').attr('class', 'axis-title');
 
 // (Later) Define update parameters: measure type, sorting direction
+let measureType = 'stores';
+let descending = true;
 
 // CHART UPDATE FUNCTION -------------------
-function update(data, type) {
+function update(data, type, desc) {
+  if (desc) {
+    data.sort((a, b) => b[type] - a[type]);
+    console.log(data);
+  } else {
+    data.sort((a, b) => a[type] - b[type]);
+  }
+
   const companies = data.map((d) => d.company);
   // Update scale domains
   xScale.domain(companies);
   yScale.domain([0, d3.max(data, (d) => d[type])]);
 
+  const rects = group.selectAll('rect').data(data, (d) => d.companies);
+
   // Implement the enter-update-exist sequence
-  group
-    .selectAll('rect')
-    .data(data)
+  rects
     .enter()
     .append('rect')
+    .attr('x', (d) => xScale(d.company))
+    .attr('y', height)
+    .attr('fill', 'magneta')
+    .merge(rects)
+    .transition()
+    .duration(1000)
     .attr('x', (d) => xScale(d.company))
     .attr('y', (d) => yScale(d[type]))
     .attr('width', (d) => xScale.bandwidth())
     .attr('height', (d) => height - yScale(d[type]))
     .attr('fill', 'steelblue');
+
+  rects
+    .exit()
+    .transition()
+    .duration(500)
+    .attr('fill', 'cyan')
+    .attr('y', height)
+    .remove();
 
   // Update axes and axis title
   xAxisGroup.attr('transform', 'translate(0,' + height + ')').call(xAxis);
@@ -66,11 +89,18 @@ function update(data, type) {
 // Loading data
 d3.csv('coffee-house-chains.csv', d3.autoType).then((data) => {
   // First barchart Rendering
-  update(data, 'stores');
+  update(data, measureType, descending);
 
   // (Later) Handling the type change
   d3.select('#group-by').on('change', (e) => {
-    update(data, e.target.value);
+    measureType = e.target.value;
+    update(data, measureType, descending);
+  });
+
+  d3.select('#sorting').on('click', () => {
+    descending = !descending;
+    console.log('decsending', descending);
+    update(data, measureType, descending);
   });
 });
 
