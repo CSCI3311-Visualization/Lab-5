@@ -40,7 +40,7 @@ function update(data, type, desc) {
   } else {
     data.sort((a, b) => a[type] - b[type]);
   }
-
+  console.log(type);
   const companies = data.map((d) => d.company);
   // Update scale domains
   xScale.domain(companies);
@@ -85,12 +85,18 @@ function update(data, type, desc) {
     .call(yAxis);
 
   yAxisTitle
-    .attr('x', 30)
+    .attr('x', -10)
     .attr('y', -10)
     .attr('dy', '.2em')
     .attr('font-size', 15)
-    .style('text-anchor', 'end')
-    .text('Stores');
+    .style('text-anchor', 'start')
+    .text(() => {
+      if (type == 'stores') {
+        return 'Stores';
+      } else {
+        return 'Billion USD';
+      }
+    });
 }
 
 // Loading data
@@ -104,15 +110,9 @@ d3.csv('coffee-house-chains.csv', d3.autoType).then((data) => {
     update(data, measureType, descending);
   });
 
+  // (Later) Handling the sorting direction change
   d3.select('#sorting').on('click', () => {
     descending = !descending;
-    console.log('decsending', descending);
     update(data, measureType, descending);
   });
 });
-
-// let type = document.querySelector('#group-by');
-
-// console.log(type.value);
-
-// (Later) Handling the sorting direction change
