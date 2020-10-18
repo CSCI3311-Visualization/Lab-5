@@ -31,12 +31,12 @@ let yAxisTitle = group.append('text').attr('class', 'axis-title');
 // (Later) Define update parameters: measure type, sorting direction
 let measureType = 'stores';
 let descending = true;
+const durationSpeed = 1000;
 
 // CHART UPDATE FUNCTION -------------------
 function update(data, type, desc) {
   if (desc) {
     data.sort((a, b) => b[type] - a[type]);
-    console.log(data);
   } else {
     data.sort((a, b) => a[type] - b[type]);
   }
@@ -46,7 +46,9 @@ function update(data, type, desc) {
   xScale.domain(companies);
   yScale.domain([0, d3.max(data, (d) => d[type])]);
 
-  const rects = group.selectAll('rect').data(data, (d) => d.companies);
+  const rects = group.selectAll('rect').data(data, (d) => {
+    return d.company;
+  });
 
   // Implement the enter-update-exist sequence
   rects
@@ -57,7 +59,7 @@ function update(data, type, desc) {
     .attr('fill', 'magneta')
     .merge(rects)
     .transition()
-    .duration(1000)
+    .duration(durationSpeed)
     .attr('x', (d) => xScale(d.company))
     .attr('y', (d) => yScale(d[type]))
     .attr('width', (d) => xScale.bandwidth())
@@ -67,15 +69,19 @@ function update(data, type, desc) {
   rects
     .exit()
     .transition()
-    .duration(500)
-    .attr('fill', 'cyan')
+    .duration(durationSpeed / 2)
+    .attr('fill', '#EBEBEB')
     .attr('y', height)
     .remove();
 
   // Update axes and axis title
-  xAxisGroup.attr('transform', 'translate(0,' + height + ')').call(xAxis);
+  xAxisGroup
+    .attr('transform', 'translate(0,' + height + ')')
+    .transition()
+    .duration(durationSpeed)
+    .call(xAxis);
 
-  yAxisGroup.call(yAxis);
+  yAxisGroup.transition().duration(durationSpeed).call(yAxis);
 
   yAxisTitle
     .attr('x', 30)

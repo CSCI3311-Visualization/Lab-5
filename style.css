@@ -1,0 +1,16 @@
+.option-container {
+  width: 75%;
+  display: flex;
+}
+
+#group-by {
+  width: 300px;
+  margin-right: 20px;
+}
+
+label {
+  margin-right: 20px;
+  /* display: flex;
+  align-items: center; */
+  padding-top: 7px;
+}

@@ -3,6 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Milligram CSS -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css"
+    />
+
     
     <link rel="stylesheet" href="style.css"/>
     <script defer src="https://d3js.org/d3.v6.min.js"></script>
@@ -13,12 +28,17 @@
 <body>
     <h1>Coffee House Chains</h1>
     <h3>A ranking of selected leading coffee house chains worldwide</h3>
+    
+    <div class="option-container">
+        <label for="group-by">Group By</label>
+        <select id="group-by">
+        <option value="stores">Stores worldwide</option>
+        <option value="revenue">Revenue in billion U.S. dollars</option>
+        </select>
+        <button class="button-outline" id="sorting">Sort</button>
+    </div>
+    
     <div class="chart"></div>
-    <label for="group-by">Group By</label>
-    <select id="group-by">
-    <option value="stores">Stores worldwide</option>
-    <option value="revenue">Revenue in billion U.S. dollars</option>
-    </select>
-    <button id="sorting">Sort</button>
+    
 </body>
 </html>
