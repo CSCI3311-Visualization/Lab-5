@@ -35,12 +35,13 @@ const durationSpeed = 1000;
 
 // CHART UPDATE FUNCTION -------------------
 function update(data, type, desc) {
+  // sorting direction
   if (desc) {
     data.sort((a, b) => b[type] - a[type]);
   } else {
     data.sort((a, b) => a[type] - b[type]);
   }
-  
+
   const companies = data.map((d) => d.company);
   // Update scale domains
   xScale.domain(companies);
