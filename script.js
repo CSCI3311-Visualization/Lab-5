@@ -40,7 +40,7 @@ function update(data, type, desc) {
   } else {
     data.sort((a, b) => a[type] - b[type]);
   }
-  console.log(type);
+  
   const companies = data.map((d) => d.company);
   // Update scale domains
   xScale.domain(companies);
